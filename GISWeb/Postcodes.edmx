@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PostcodesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="PostalCodes">
+          <Key>
+            <PropertyRef Name="PostalCodeID" />
+          </Key>
+          <Property Name="PostalCodeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullPostcode" Type="nvarchar(max)" />
+          <Property Name="InUse" Type="bit" Nullable="false" />
+          <Property Name="Latitude" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Longitude" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Easting" Type="int" Nullable="false" />
+          <Property Name="Northing" Type="int" Nullable="false" />
+          <Property Name="GridReference" Type="nvarchar(max)" />
+          <Property Name="Ward" Type="nvarchar(max)" />
+          <Property Name="Parish" Type="nvarchar(max)" />
+          <Property Name="Introduced" Type="datetime" Nullable="false" />
+          <Property Name="Terminated" Type="datetime" />
+          <Property Name="Altitude" Type="int" Nullable="false" />
+          <Property Name="Country" Type="nvarchar(max)" />
+          <Property Name="LastUpdated" Type="datetime" />
+          <Property Name="Quality" Type="nvarchar(max)" />
+          <Property Name="LSOACode" Type="nvarchar(max)" />
+          <Property Name="Processed" Type="bit" Nullable="false" />
+          <Property Name="LastVisited" Type="datetime" />
+          <Property Name="SalesRep" Type="nvarchar(max)" />
+          <Property Name="LiveCustomers" Type="int" Nullable="false" />
+          <Property Name="LiveKeypad" Type="int" Nullable="false" />
+          <Property Name="LiveMetered" Type="int" Nullable="false" />
+          <Property Name="LiveCommercial" Type="int" Nullable="false" />
+          <Property Name="LiveFarmer" Type="int" Nullable="false" />
+          <Property Name="LiveUnmetered" Type="int" Nullable="false" />
+          <Property Name="DistrictID" Type="int" />
+        </EntityType>
+        <EntityType Name="Postcodes">
+          <Key>
+            <PropertyRef Name="PostcodeID" />
+          </Key>
+          <Property Name="PostcodeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullPostcode" Type="nvarchar(max)" />
+          <Property Name="InUse" Type="bit" Nullable="false" />
+          <Property Name="Latitude" Type="decimal" Precision="9" Scale="6" Nullable="false" />
+          <Property Name="Longitude" Type="decimal" Precision="9" Scale="6" Nullable="false" />
+          <Property Name="Easting" Type="int" Nullable="false" />
+          <Property Name="Northing" Type="int" Nullable="false" />
+          <Property Name="GridReference" Type="nvarchar(max)" />
+          <Property Name="Ward" Type="nvarchar(max)" />
+          <Property Name="Parish" Type="nvarchar(max)" />
+          <Property Name="Introduced" Type="datetime" Nullable="false" />
+          <Property Name="Terminated" Type="datetime" />
+          <Property Name="Altitude" Type="int" Nullable="false" />
+          <Property Name="Country" Type="nvarchar(max)" />
+          <Property Name="LastUpdated" Type="datetime" />
+          <Property Name="Quality" Type="nvarchar(max)" />
+          <Property Name="LSOACode" Type="nvarchar(max)" />
+          <Property Name="Processed" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Premises">
+          <Key>
+            <PropertyRef Name="PremiseID" />
+          </Key>
+          <Property Name="PremiseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MPRN" Type="nvarchar(max)" />
+          <Property Name="MeterPointAddress" Type="nvarchar(max)" />
+          <Property Name="DUoSGroup" Type="nvarchar(max)" />
+          <Property Name="MeterConfigurationCode" Type="nvarchar(max)" />
+          <Property Name="MeterPointStatus" Type="nvarchar(max)" />
+          <Property Name="PostalCodeID" Type="int" Nullable="false" />
+          <Property Name="Live" Type="bit" Nullable="false" />
+          <Property Name="Pending" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_dbo_Premises_dbo_PostalCodes_PostalCodeID">
+          <End Role="PostalCodes" Type="Self.PostalCodes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Premises" Type="Self.Premises" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PostalCodes">
+              <PropertyRef Name="PostalCodeID" />
+            </Principal>
+            <Dependent Role="Premises">
+              <PropertyRef Name="PostalCodeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="CountKeypadPremisesByPostcode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="postcode" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="CountTotalPremisesByPostcode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="postcode" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <EntityContainer Name="PostcodesModelStoreContainer">
+          <EntitySet Name="PostalCodes" EntityType="Self.PostalCodes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Postcodes" EntityType="Self.Postcodes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Premises" EntityType="Self.Premises" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_Premises_dbo_PostalCodes_PostalCodeID" Association="Self.FK_dbo_Premises_dbo_PostalCodes_PostalCodeID">
+            <End Role="PostalCodes" EntitySet="PostalCodes" />
+            <End Role="Premises" EntitySet="Premises" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PostcodesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="PostalCode">
+          <Key>
+            <PropertyRef Name="PostalCodeID" />
+          </Key>
+          <Property Name="PostalCodeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullPostcode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InUse" Type="Boolean" Nullable="false" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Easting" Type="Int32" Nullable="false" />
+          <Property Name="Northing" Type="Int32" Nullable="false" />
+          <Property Name="GridReference" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Ward" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Parish" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Introduced" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Terminated" Type="DateTime" Precision="3" />
+          <Property Name="Altitude" Type="Int32" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LastUpdated" Type="DateTime" Precision="3" />
+          <Property Name="Quality" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LSOACode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Processed" Type="Boolean" Nullable="false" />
+          <Property Name="LastVisited" Type="DateTime" Precision="3" />
+          <Property Name="SalesRep" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LiveCustomers" Type="Int32" Nullable="false" />
+          <Property Name="LiveKeypad" Type="Int32" Nullable="false" />
+          <Property Name="LiveMetered" Type="Int32" Nullable="false" />
+          <Property Name="LiveCommercial" Type="Int32" Nullable="false" />
+          <Property Name="LiveFarmer" Type="Int32" Nullable="false" />
+          <Property Name="LiveUnmetered" Type="Int32" Nullable="false" />
+          <Property Name="DistrictID" Type="Int32" />
+          <NavigationProperty Name="Premises" Relationship="Self.FK_dbo_Premises_dbo_PostalCodes_PostalCodeID" FromRole="PostalCodes" ToRole="Premises" />
+        </EntityType>
+        <EntityType Name="Postcode">
+          <Key>
+            <PropertyRef Name="PostcodeID" />
+          </Key>
+          <Property Name="PostcodeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullPostcode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InUse" Type="Boolean" Nullable="false" />
+          <Property Name="Latitude" Type="Decimal" Precision="9" Scale="6" Nullable="false" />
+          <Property Name="Longitude" Type="Decimal" Precision="9" Scale="6" Nullable="false" />
+          <Property Name="Easting" Type="Int32" Nullable="false" />
+          <Property Name="Northing" Type="Int32" Nullable="false" />
+          <Property Name="GridReference" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Ward" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Parish" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Introduced" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Terminated" Type="DateTime" Precision="3" />
+          <Property Name="Altitude" Type="Int32" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LastUpdated" Type="DateTime" Precision="3" />
+          <Property Name="Quality" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LSOACode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Processed" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Premis">
+          <Key>
+            <PropertyRef Name="PremiseID" />
+          </Key>
+          <Property Name="PremiseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MPRN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MeterPointAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DUoSGroup" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MeterConfigurationCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MeterPointStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCodeID" Type="Int32" Nullable="false" />
+          <Property Name="Live" Type="Boolean" Nullable="false" />
+          <Property Name="Pending" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="PostalCode" Relationship="Self.FK_dbo_Premises_dbo_PostalCodes_PostalCodeID" FromRole="Premises" ToRole="PostalCodes" />
+        </EntityType>
+        <Association Name="FK_dbo_Premises_dbo_PostalCodes_PostalCodeID">
+          <End Role="PostalCodes" Type="Self.PostalCode" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Premises" Type="Self.Premis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PostalCodes">
+              <PropertyRef Name="PostalCodeID" />
+            </Principal>
+            <Dependent Role="Premises">
+              <PropertyRef Name="PostalCodeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PostcodesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="PostalCodes" EntityType="Self.PostalCode" />
+          <EntitySet Name="Postcodes" EntityType="Self.Postcode" />
+          <EntitySet Name="Premises" EntityType="Self.Premis" />
+          <AssociationSet Name="FK_dbo_Premises_dbo_PostalCodes_PostalCodeID" Association="Self.FK_dbo_Premises_dbo_PostalCodes_PostalCodeID">
+            <End Role="PostalCodes" EntitySet="PostalCodes" />
+            <End Role="Premises" EntitySet="Premises" />
+          </AssociationSet>
+          <FunctionImport Name="CountKeypadPremisesByPostcode" ReturnType="Collection(Int32)">
+            <Parameter Name="postcode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CountTotalPremisesByPostcode" ReturnType="Collection(Int32)">
+            <Parameter Name="postcode" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PostcodesModelStoreContainer" CdmEntityContainer="PostcodesEntities">
+          <EntitySetMapping Name="PostalCodes">
+            <EntityTypeMapping TypeName="PostcodesModel.PostalCode">
+              <MappingFragment StoreEntitySet="PostalCodes">
+                <ScalarProperty Name="PostalCodeID" ColumnName="PostalCodeID" />
+                <ScalarProperty Name="FullPostcode" ColumnName="FullPostcode" />
+                <ScalarProperty Name="InUse" ColumnName="InUse" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Easting" ColumnName="Easting" />
+                <ScalarProperty Name="Northing" ColumnName="Northing" />
+                <ScalarProperty Name="GridReference" ColumnName="GridReference" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="Parish" ColumnName="Parish" />
+                <ScalarProperty Name="Introduced" ColumnName="Introduced" />
+                <ScalarProperty Name="Terminated" ColumnName="Terminated" />
+                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="Quality" ColumnName="Quality" />
+                <ScalarProperty Name="LSOACode" ColumnName="LSOACode" />
+                <ScalarProperty Name="Processed" ColumnName="Processed" />
+                <ScalarProperty Name="LastVisited" ColumnName="LastVisited" />
+                <ScalarProperty Name="SalesRep" ColumnName="SalesRep" />
+                <ScalarProperty Name="LiveCustomers" ColumnName="LiveCustomers" />
+                <ScalarProperty Name="LiveKeypad" ColumnName="LiveKeypad" />
+                <ScalarProperty Name="LiveMetered" ColumnName="LiveMetered" />
+                <ScalarProperty Name="LiveCommercial" ColumnName="LiveCommercial" />
+                <ScalarProperty Name="LiveFarmer" ColumnName="LiveFarmer" />
+                <ScalarProperty Name="LiveUnmetered" ColumnName="LiveUnmetered" />
+                <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Postcodes">
+            <EntityTypeMapping TypeName="PostcodesModel.Postcode">
+              <MappingFragment StoreEntitySet="Postcodes">
+                <ScalarProperty Name="PostcodeID" ColumnName="PostcodeID" />
+                <ScalarProperty Name="FullPostcode" ColumnName="FullPostcode" />
+                <ScalarProperty Name="InUse" ColumnName="InUse" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Easting" ColumnName="Easting" />
+                <ScalarProperty Name="Northing" ColumnName="Northing" />
+                <ScalarProperty Name="GridReference" ColumnName="GridReference" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="Parish" ColumnName="Parish" />
+                <ScalarProperty Name="Introduced" ColumnName="Introduced" />
+                <ScalarProperty Name="Terminated" ColumnName="Terminated" />
+                <ScalarProperty Name="Altitude" ColumnName="Altitude" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="Quality" ColumnName="Quality" />
+                <ScalarProperty Name="LSOACode" ColumnName="LSOACode" />
+                <ScalarProperty Name="Processed" ColumnName="Processed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Premises">
+            <EntityTypeMapping TypeName="PostcodesModel.Premis">
+              <MappingFragment StoreEntitySet="Premises">
+                <ScalarProperty Name="PremiseID" ColumnName="PremiseID" />
+                <ScalarProperty Name="MPRN" ColumnName="MPRN" />
+                <ScalarProperty Name="MeterPointAddress" ColumnName="MeterPointAddress" />
+                <ScalarProperty Name="DUoSGroup" ColumnName="DUoSGroup" />
+                <ScalarProperty Name="MeterConfigurationCode" ColumnName="MeterConfigurationCode" />
+                <ScalarProperty Name="MeterPointStatus" ColumnName="MeterPointStatus" />
+                <ScalarProperty Name="PostalCodeID" ColumnName="PostalCodeID" />
+                <ScalarProperty Name="Live" ColumnName="Live" />
+                <ScalarProperty Name="Pending" ColumnName="Pending" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CountKeypadPremisesByPostcode" FunctionName="PostcodesModel.Store.CountKeypadPremisesByPostcode" />
+          <FunctionImportMapping FunctionImportName="CountTotalPremisesByPostcode" FunctionName="PostcodesModel.Store.CountTotalPremisesByPostcode" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

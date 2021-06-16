@@ -1,0 +1,648 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GISMultipleAllocationModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Outcome">
+          <Key>
+            <PropertyRef Name="OutcomeId" />
+          </Key>
+          <Property Name="OutcomeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PremiseId" Type="int" />
+          <Property Name="ActionDateTime" Type="datetime" />
+          <Property Name="DoorKnocked" Type="bit" />
+          <Property Name="DoorKnockedCancelReason" Type="nvarchar" MaxLength="250" />
+          <Property Name="ContactMade" Type="bit" />
+          <Property Name="ContactMadeCancelReason" Type="nvarchar" MaxLength="50" />
+          <Property Name="DecisionMakerMet" Type="bit" />
+          <Property Name="DecisionMakerMetCancelReason" Type="nvarchar" MaxLength="50" />
+          <Property Name="DecisionMakerPresentedTo" Type="bit" />
+          <Property Name="DecisionMakerPresentedToCancelReason" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sale" Type="bit" />
+          <Property Name="SaleCancelReason" Type="nvarchar" MaxLength="50" />
+          <Property Name="SalesRepId" Type="int" />
+          <Property Name="Longitude" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="Latitude" Type="decimal" Precision="18" Scale="8" />
+          <Property Name="Archived" Type="bit" />
+          <Property Name="ArchivedDateTime" Type="datetime" />
+          <Property Name="Reschedule" Type="bit" />
+          <Property Name="RescheduleDateTime" Type="datetime" />
+          <Property Name="ActionStageEnd" Type="nvarchar" MaxLength="250" />
+          <Property Name="ActionStageCancelReason" Type="nvarchar" MaxLength="250" />
+          <Property Name="SaleKeypad" Type="bit" />
+          <Property Name="SaleBillPay" Type="bit" />
+          <Property Name="DoNotContact" Type="bit" />
+          <Property Name="SaleOrigin" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="RepArea">
+          <Key>
+            <PropertyRef Name="RepAreaId" />
+          </Key>
+          <Property Name="RepAreaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RepName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SalesRepId" Type="int" Nullable="false" />
+          <Property Name="PostalCodeID" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="DateAdded" Type="datetime" Nullable="false" />
+          <Property Name="Archived" Type="bit" />
+        </EntityType>
+        <EntityType Name="SalesRep">
+          <Key>
+            <PropertyRef Name="SalesRepId" />
+          </Key>
+          <Property Name="SalesRepId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RepName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Company" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="250" />
+          <Property Name="Archived" Type="bit" />
+        </EntityType>
+        <Function Name="PremisesByPremiseID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PremiseID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PremisesByPremiseIdMostRecentOutcome" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PremiseID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PremisesBySalesRepIdCountKnockedByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="salesRepId" Type="int" Mode="In" />
+          <Parameter Name="checkDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="PremisesBySalesRepIdMostRecentOutcomeCallBack" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="salesRepId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PremisesBySalesRepIdMostRecentOutcomeCurrentArea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="salesRepId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PremisesBySalesRepIdMostRecentOutcomeRemoveKnocked" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="salesRepId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RepAreaPremisesAllocatedToSalesRepIdByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="salesrepid" Type="int" Mode="In" />
+          <Parameter Name="reportDate" Type="datetime" Mode="In" />
+        </Function>
+        <EntityContainer Name="GISMultipleAllocationModelStoreContainer">
+          <EntitySet Name="Outcome" EntityType="Self.Outcome" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RepArea" EntityType="Self.RepArea" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalesRep" EntityType="Self.SalesRep" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GISMultipleAllocationModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="RepArea">
+          <Key>
+            <PropertyRef Name="RepAreaId" />
+          </Key>
+          <Property Name="RepAreaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RepName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SalesRepId" Type="Int32" Nullable="false" />
+          <Property Name="PostalCodeID" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateAdded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Archived" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SalesRep">
+          <Key>
+            <PropertyRef Name="SalesRepId" />
+          </Key>
+          <Property Name="SalesRepId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RepName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Company" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Archived" Type="Boolean" />
+        </EntityType>
+        <EntityContainer Name="GISMultipleAllocationEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="RepAreas" EntityType="Self.RepArea" />
+          <EntitySet Name="SalesReps" EntityType="Self.SalesRep" />
+          <EntitySet Name="Outcomes" EntityType="GISMultipleAllocationModel.Outcome" />
+          <FunctionImport Name="PremisesByPremiseID" ReturnType="Collection(GISMultipleAllocationModel.PremisesByPremiseID_Result)">
+          <Parameter Name="PremiseID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PremisesByPremiseIdMostRecentOutcome" ReturnType="Collection(GISMultipleAllocationModel.PremisesByPremiseIdMostRecentOutcome_Result)">
+          <Parameter Name="PremiseID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PremisesBySalesRepIdCountKnockedByDate" ReturnType="Collection(GISMultipleAllocationModel.PremisesBySalesRepIdCountKnockedByDate_Result)">
+            <Parameter Name="salesRepId" Mode="In" Type="Int32" />
+            <Parameter Name="checkDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="PremisesBySalesRepIdMostRecentOutcomeCallBack" ReturnType="Collection(GISMultipleAllocationModel.PremisesBySalesRepIdMostRecentOutcomeCallBack_Result)">
+          <Parameter Name="salesRepId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PremisesBySalesRepIdMostRecentOutcomeCurrentArea" ReturnType="Collection(GISMultipleAllocationModel.PremisesBySalesRepIdMostRecentOutcomeCurrentArea_Result)">
+          <Parameter Name="salesRepId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PremisesBySalesRepIdMostRecentOutcomeRemoveKnocked" ReturnType="Collection(GISMultipleAllocationModel.PremisesBySalesRepIdMostRecentOutcomeRemoveKnocked_Result)">
+          <Parameter Name="salesRepId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RepAreaPremisesAllocatedToSalesRepIdByDate" ReturnType="Collection(GISMultipleAllocationModel.RepAreaPremisesAllocatedToSalesRepIdByDate_Result)">
+            <Parameter Name="salesrepid" Mode="In" Type="Int32" />
+            <Parameter Name="reportDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="Outcome">
+          <Key>
+            <PropertyRef Name="OutcomeId" />
+          </Key>
+          <Property Name="OutcomeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PremiseId" Type="Int32" />
+          <Property Name="ActionDateTime" Type="DateTime" Precision="3" />
+          <Property Name="DoorKnocked" Type="Boolean" />
+          <Property Name="DoorKnockedCancelReason" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ContactMade" Type="Boolean" />
+          <Property Name="ContactMadeCancelReason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DecisionMakerMet" Type="Boolean" />
+          <Property Name="DecisionMakerMetCancelReason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DecisionMakerPresentedTo" Type="Boolean" />
+          <Property Name="DecisionMakerPresentedToCancelReason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sale" Type="Boolean" />
+          <Property Name="SaleCancelReason" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SalesRepId" Type="Int32" />
+          <Property Name="Longitude" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="Latitude" Type="Decimal" Precision="18" Scale="8" />
+          <Property Name="Archived" Type="Boolean" />
+          <Property Name="ArchivedDateTime" Type="DateTime" Precision="3" />
+          <Property Name="Reschedule" Type="Boolean" />
+          <Property Name="RescheduleDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ActionStageEnd" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ActionStageCancelReason" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="SaleKeypad" Type="Boolean" />
+          <Property Name="SaleBillPay" Type="Boolean" />
+          <Property Name="DoNotContact" Type="Boolean" />
+          <Property Name="SaleOrigin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="PremisesByPremiseID_Result">
+          <Property Type="Int32" Name="PremiseID" Nullable="false" />
+          <Property Type="String" Name="MPRN" Nullable="true" />
+          <Property Type="String" Name="MeterPointAddress" Nullable="true" />
+          <Property Type="String" Name="DUoSGroup" Nullable="true" />
+          <Property Type="String" Name="MeterConfigurationCode" Nullable="true" />
+          <Property Type="String" Name="MeterPointStatus" Nullable="true" />
+          <Property Type="Int32" Name="PostalCodeID" Nullable="false" />
+          <Property Type="Boolean" Name="Live" Nullable="false" />
+          <Property Type="Boolean" Name="Pending" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="PremisesByPremiseIdMostRecentOutcome_Result">
+          <Property Type="Int32" Name="PremiseID" Nullable="true" />
+          <Property Type="String" Name="MPRN" Nullable="true" />
+          <Property Type="String" Name="MeterPointAddress" Nullable="true" />
+          <Property Type="String" Name="DUosGroup" Nullable="true" />
+          <Property Type="String" Name="MeterConfigurationCode" Nullable="true" />
+          <Property Type="String" Name="MeterPointStatus" Nullable="true" />
+          <Property Type="Int32" Name="PostalCodeID" Nullable="true" />
+          <Property Type="Boolean" Name="Live" Nullable="true" />
+          <Property Type="Boolean" Name="Pending" Nullable="true" />
+          <Property Type="Int32" Name="OutcomeId" Nullable="true" />
+          <Property Type="DateTime" Name="ActionDateTime" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="DoorKnocked" Nullable="false" />
+          <Property Type="String" Name="DoorKnockedCancelReason" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="ContactMade" Nullable="true" />
+          <Property Type="String" Name="ContactMadeCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="DecisionMakerMet" Nullable="true" />
+          <Property Type="String" Name="DecisionMakerMetCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="DecisionMakerPresentedTo" Nullable="true" />
+          <Property Type="String" Name="DecisionMakerPresentedToCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="Sale" Nullable="true" />
+          <Property Type="String" Name="SaleCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="SalesRepId" Nullable="true" />
+          <Property Type="Decimal" Name="Longitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="Decimal" Name="Latitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="Boolean" Name="Archived" Nullable="true" />
+          <Property Type="DateTime" Name="ArchivedDateTime" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="Reschedule" Nullable="true" />
+          <Property Type="DateTime" Name="RescheduleDateTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="ActionStageEnd" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ActionStageCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="SaleKeypad" Nullable="true" />
+          <Property Type="Boolean" Name="SaleBillPay" Nullable="true" />
+          <Property Type="Boolean" Name="DoNotContact" Nullable="true" />
+          <Property Type="String" Name="SaleOrigin" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="PremisesBySalesRepIdCountKnockedByDate_Result">
+          <Property Type="Int32" Name="PremiseID" Nullable="true" />
+          <Property Type="String" Name="MPRN" Nullable="true" />
+          <Property Type="String" Name="MeterPointAddress" Nullable="true" />
+          <Property Type="String" Name="DUosGroup" Nullable="true" />
+          <Property Type="String" Name="MeterConfigurationCode" Nullable="true" />
+          <Property Type="String" Name="MeterPointStatus" Nullable="true" />
+          <Property Type="Int32" Name="PostalCodeID" Nullable="true" />
+          <Property Type="Boolean" Name="Live" Nullable="true" />
+          <Property Type="Boolean" Name="Pending" Nullable="true" />
+          <Property Type="Int32" Name="OutcomeId" Nullable="true" />
+          <Property Type="DateTime" Name="ActionDateTime" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="DoorKnocked" Nullable="false" />
+          <Property Type="String" Name="DoorKnockedCancelReason" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="ContactMade" Nullable="true" />
+          <Property Type="String" Name="ContactMadeCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="DecisionMakerMet" Nullable="true" />
+          <Property Type="String" Name="DecisionMakerMetCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="DecisionMakerPresentedTo" Nullable="true" />
+          <Property Type="String" Name="DecisionMakerPresentedToCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="Sale" Nullable="true" />
+          <Property Type="String" Name="SaleCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="SalesRepId" Nullable="true" />
+          <Property Type="Decimal" Name="Longitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="Decimal" Name="Latitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="Boolean" Name="Archived" Nullable="true" />
+          <Property Type="DateTime" Name="ArchivedDateTime" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="Reschedule" Nullable="true" />
+          <Property Type="DateTime" Name="RescheduleDateTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="ActionStageEnd" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ActionStageCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="SaleKeypad" Nullable="true" />
+          <Property Type="Boolean" Name="SaleBillPay" Nullable="true" />
+          <Property Type="Boolean" Name="DoNotContact" Nullable="true" />
+          <Property Type="String" Name="SaleOrigin" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="PremisesBySalesRepIdMostRecentOutcomeCallBack_Result">
+          <Property Type="Int32" Name="PremiseID" Nullable="true" />
+          <Property Type="String" Name="MPRN" Nullable="true" />
+          <Property Type="String" Name="MeterPointAddress" Nullable="true" />
+          <Property Type="String" Name="DUosGroup" Nullable="true" />
+          <Property Type="String" Name="MeterConfigurationCode" Nullable="true" />
+          <Property Type="String" Name="MeterPointStatus" Nullable="true" />
+          <Property Type="Int32" Name="PostalCodeID" Nullable="true" />
+          <Property Type="Boolean" Name="Live" Nullable="true" />
+          <Property Type="Boolean" Name="Pending" Nullable="true" />
+          <Property Type="Int32" Name="OutcomeId" Nullable="true" />
+          <Property Type="DateTime" Name="ActionDateTime" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="DoorKnocked" Nullable="true" />
+          <Property Type="String" Name="DoorKnockedCancelReason" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="ContactMade" Nullable="true" />
+          <Property Type="String" Name="ContactMadeCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="DecisionMakerMet" Nullable="true" />
+          <Property Type="String" Name="DecisionMakerMetCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="DecisionMakerPresentedTo" Nullable="true" />
+          <Property Type="String" Name="DecisionMakerPresentedToCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="Sale" Nullable="true" />
+          <Property Type="String" Name="SaleCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="SalesRepId" Nullable="true" />
+          <Property Type="Decimal" Name="Longitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="Decimal" Name="Latitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="Boolean" Name="Archived" Nullable="true" />
+          <Property Type="DateTime" Name="ArchivedDateTime" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="Reschedule" Nullable="true" />
+          <Property Type="DateTime" Name="RescheduleDateTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="ActionStageEnd" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ActionStageCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="SaleKeypad" Nullable="true" />
+          <Property Type="Boolean" Name="SaleBillPay" Nullable="true" />
+          <Property Type="Boolean" Name="DoNotContact" Nullable="true" />
+          <Property Type="String" Name="SaleOrigin" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="PremisesBySalesRepIdMostRecentOutcomeCurrentArea_Result">
+          <Property Type="Int32" Name="PremiseID" Nullable="true" />
+          <Property Type="String" Name="MPRN" Nullable="true" />
+          <Property Type="String" Name="MeterPointAddress" Nullable="true" />
+          <Property Type="String" Name="DUosGroup" Nullable="true" />
+          <Property Type="String" Name="MeterConfigurationCode" Nullable="true" />
+          <Property Type="String" Name="MeterPointStatus" Nullable="true" />
+          <Property Type="Int32" Name="PostalCodeID" Nullable="true" />
+          <Property Type="Boolean" Name="Live" Nullable="true" />
+          <Property Type="Boolean" Name="Pending" Nullable="true" />
+          <Property Type="Int32" Name="OutcomeId" Nullable="true" />
+          <Property Type="DateTime" Name="ActionDateTime" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="DoorKnocked" Nullable="true" />
+          <Property Type="String" Name="DoorKnockedCancelReason" Nullable="true" MaxLength="250" />
+          <Property Type="Boolean" Name="ContactMade" Nullable="true" />
+          <Property Type="String" Name="ContactMadeCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="DecisionMakerMet" Nullable="true" />
+          <Property Type="String" Name="DecisionMakerMetCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="DecisionMakerPresentedTo" Nullable="true" />
+          <Property Type="String" Name="DecisionMakerPresentedToCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="Sale" Nullable="true" />
+          <Property Type="String" Name="SaleCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="SalesRepId" Nullable="true" />
+          <Property Type="Decimal" Name="Longitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="Decimal" Name="Latitude" Nullable="true" Precision="18" Scale="8" />
+          <Property Type="Boolean" Name="Archived" Nullable="true" />
+          <Property Type="DateTime" Name="ArchivedDateTime" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="Reschedule" Nullable="true" />
+          <Property Type="DateTime" Name="RescheduleDateTime" Nullable="true" Precision="23" />
+          <Property Type="String" Name="ActionStageEnd" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ActionStageCancelReason" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="SaleKeypad" Nullable="true" />
+          <Property Type="Boolean" Name="SaleBillPay" Nullable="true" />
+          <Property Type="Boolean" Name="DoNotContact" Nullable="true" />
+          <Property Type="String" Name="SaleOrigin" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="PremisesBySalesRepIdMostRecentOutcomeRemoveKnocked_Result">
+          <Property Type="Int32" Name="PremiseID" Nullable="true" />
+          <Property Type="String" Name="MPRN" Nullable="true" />
+          <Property Type="String" Name="MeterPointAddress" Nullable="true" />
+          <Property Type="String" Name="DUosGroup" Nullable="true" />
+          <Property Type="String" Name="MeterConfigurationCode" Nullable="true" />
+          <Property Type="String" Name="MeterPointStatus" Nullable="true" />
+          <Property Type="Int32" Name="PostalCodeID" Nullable="true" />
+          <Property Type="Boolean" Name="Live" Nullable="true" />
+          <Property Type="Boolean" Name="Pending" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="RepAreaPremisesAllocatedToSalesRepIdByDate_Result">
+          <Property Type="Int32" Name="PremiseID" Nullable="true" />
+          <Property Type="String" Name="MPRN" Nullable="true" />
+          <Property Type="String" Name="MeterPointAddress" Nullable="true" />
+          <Property Type="String" Name="DUoSGroup" Nullable="true" />
+          <Property Type="String" Name="MeterConfigurationCode" Nullable="true" />
+          <Property Type="String" Name="MeterPointStatus" Nullable="true" />
+          <Property Type="Int32" Name="PostalCodeID" Nullable="true" />
+          <Property Type="Boolean" Name="Live" Nullable="true" />
+          <Property Type="Boolean" Name="Pending" Nullable="true" />
+          <Property Type="DateTime" Name="StartDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="EndDate" Nullable="true" Precision="23" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GISMultipleAllocationModelStoreContainer" CdmEntityContainer="GISMultipleAllocationEntities">
+          <EntitySetMapping Name="RepAreas">
+            <EntityTypeMapping TypeName="GISMultipleAllocationModel.RepArea">
+              <MappingFragment StoreEntitySet="RepArea">
+                <ScalarProperty Name="RepAreaId" ColumnName="RepAreaId" />
+                <ScalarProperty Name="RepName" ColumnName="RepName" />
+                <ScalarProperty Name="SalesRepId" ColumnName="SalesRepId" />
+                <ScalarProperty Name="PostalCodeID" ColumnName="PostalCodeID" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+                <ScalarProperty Name="Archived" ColumnName="Archived" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalesReps">
+            <EntityTypeMapping TypeName="GISMultipleAllocationModel.SalesRep">
+              <MappingFragment StoreEntitySet="SalesRep">
+                <ScalarProperty Name="SalesRepId" ColumnName="SalesRepId" />
+                <ScalarProperty Name="RepName" ColumnName="RepName" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="Archived" ColumnName="Archived" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Outcomes">
+            <EntityTypeMapping TypeName="GISMultipleAllocationModel.Outcome">
+              <MappingFragment StoreEntitySet="Outcome">
+                <ScalarProperty Name="SaleOrigin" ColumnName="SaleOrigin" />
+                <ScalarProperty Name="DoNotContact" ColumnName="DoNotContact" />
+                <ScalarProperty Name="SaleBillPay" ColumnName="SaleBillPay" />
+                <ScalarProperty Name="SaleKeypad" ColumnName="SaleKeypad" />
+                <ScalarProperty Name="ActionStageCancelReason" ColumnName="ActionStageCancelReason" />
+                <ScalarProperty Name="ActionStageEnd" ColumnName="ActionStageEnd" />
+                <ScalarProperty Name="RescheduleDateTime" ColumnName="RescheduleDateTime" />
+                <ScalarProperty Name="Reschedule" ColumnName="Reschedule" />
+                <ScalarProperty Name="ArchivedDateTime" ColumnName="ArchivedDateTime" />
+                <ScalarProperty Name="Archived" ColumnName="Archived" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="SalesRepId" ColumnName="SalesRepId" />
+                <ScalarProperty Name="SaleCancelReason" ColumnName="SaleCancelReason" />
+                <ScalarProperty Name="Sale" ColumnName="Sale" />
+                <ScalarProperty Name="DecisionMakerPresentedToCancelReason" ColumnName="DecisionMakerPresentedToCancelReason" />
+                <ScalarProperty Name="DecisionMakerPresentedTo" ColumnName="DecisionMakerPresentedTo" />
+                <ScalarProperty Name="DecisionMakerMetCancelReason" ColumnName="DecisionMakerMetCancelReason" />
+                <ScalarProperty Name="DecisionMakerMet" ColumnName="DecisionMakerMet" />
+                <ScalarProperty Name="ContactMadeCancelReason" ColumnName="ContactMadeCancelReason" />
+                <ScalarProperty Name="ContactMade" ColumnName="ContactMade" />
+                <ScalarProperty Name="DoorKnockedCancelReason" ColumnName="DoorKnockedCancelReason" />
+                <ScalarProperty Name="DoorKnocked" ColumnName="DoorKnocked" />
+                <ScalarProperty Name="ActionDateTime" ColumnName="ActionDateTime" />
+                <ScalarProperty Name="PremiseId" ColumnName="PremiseId" />
+                <ScalarProperty Name="OutcomeId" ColumnName="OutcomeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PremisesByPremiseID" FunctionName="GISMultipleAllocationModel.Store.PremisesByPremiseID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GISMultipleAllocationModel.PremisesByPremiseID_Result">
+                <ScalarProperty Name="PremiseID" ColumnName="PremiseID" />
+                <ScalarProperty Name="MPRN" ColumnName="MPRN" />
+                <ScalarProperty Name="MeterPointAddress" ColumnName="MeterPointAddress" />
+                <ScalarProperty Name="DUoSGroup" ColumnName="DUoSGroup" />
+                <ScalarProperty Name="MeterConfigurationCode" ColumnName="MeterConfigurationCode" />
+                <ScalarProperty Name="MeterPointStatus" ColumnName="MeterPointStatus" />
+                <ScalarProperty Name="PostalCodeID" ColumnName="PostalCodeID" />
+                <ScalarProperty Name="Live" ColumnName="Live" />
+                <ScalarProperty Name="Pending" ColumnName="Pending" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PremisesByPremiseIdMostRecentOutcome" FunctionName="GISMultipleAllocationModel.Store.PremisesByPremiseIdMostRecentOutcome">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GISMultipleAllocationModel.PremisesByPremiseIdMostRecentOutcome_Result">
+                <ScalarProperty Name="PremiseID" ColumnName="PremiseID" />
+                <ScalarProperty Name="MPRN" ColumnName="MPRN" />
+                <ScalarProperty Name="MeterPointAddress" ColumnName="MeterPointAddress" />
+                <ScalarProperty Name="DUosGroup" ColumnName="DUosGroup" />
+                <ScalarProperty Name="MeterConfigurationCode" ColumnName="MeterConfigurationCode" />
+                <ScalarProperty Name="MeterPointStatus" ColumnName="MeterPointStatus" />
+                <ScalarProperty Name="PostalCodeID" ColumnName="PostalCodeID" />
+                <ScalarProperty Name="Live" ColumnName="Live" />
+                <ScalarProperty Name="Pending" ColumnName="Pending" />
+                <ScalarProperty Name="OutcomeId" ColumnName="OutcomeId" />
+                <ScalarProperty Name="ActionDateTime" ColumnName="ActionDateTime" />
+                <ScalarProperty Name="DoorKnocked" ColumnName="DoorKnocked" />
+                <ScalarProperty Name="DoorKnockedCancelReason" ColumnName="DoorKnockedCancelReason" />
+                <ScalarProperty Name="ContactMade" ColumnName="ContactMade" />
+                <ScalarProperty Name="ContactMadeCancelReason" ColumnName="ContactMadeCancelReason" />
+                <ScalarProperty Name="DecisionMakerMet" ColumnName="DecisionMakerMet" />
+                <ScalarProperty Name="DecisionMakerMetCancelReason" ColumnName="DecisionMakerMetCancelReason" />
+                <ScalarProperty Name="DecisionMakerPresentedTo" ColumnName="DecisionMakerPresentedTo" />
+                <ScalarProperty Name="DecisionMakerPresentedToCancelReason" ColumnName="DecisionMakerPresentedToCancelReason" />
+                <ScalarProperty Name="Sale" ColumnName="Sale" />
+                <ScalarProperty Name="SaleCancelReason" ColumnName="SaleCancelReason" />
+                <ScalarProperty Name="SalesRepId" ColumnName="SalesRepId" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Archived" ColumnName="Archived" />
+                <ScalarProperty Name="ArchivedDateTime" ColumnName="ArchivedDateTime" />
+                <ScalarProperty Name="Reschedule" ColumnName="Reschedule" />
+                <ScalarProperty Name="RescheduleDateTime" ColumnName="RescheduleDateTime" />
+                <ScalarProperty Name="ActionStageEnd" ColumnName="ActionStageEnd" />
+                <ScalarProperty Name="ActionStageCancelReason" ColumnName="ActionStageCancelReason" />
+                <ScalarProperty Name="SaleKeypad" ColumnName="SaleKeypad" />
+                <ScalarProperty Name="SaleBillPay" ColumnName="SaleBillPay" />
+                <ScalarProperty Name="DoNotContact" ColumnName="DoNotContact" />
+                <ScalarProperty Name="SaleOrigin" ColumnName="SaleOrigin" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PremisesBySalesRepIdCountKnockedByDate" FunctionName="GISMultipleAllocationModel.Store.PremisesBySalesRepIdCountKnockedByDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GISMultipleAllocationModel.PremisesBySalesRepIdCountKnockedByDate_Result">
+                <ScalarProperty Name="PremiseID" ColumnName="PremiseID" />
+                <ScalarProperty Name="MPRN" ColumnName="MPRN" />
+                <ScalarProperty Name="MeterPointAddress" ColumnName="MeterPointAddress" />
+                <ScalarProperty Name="DUosGroup" ColumnName="DUosGroup" />
+                <ScalarProperty Name="MeterConfigurationCode" ColumnName="MeterConfigurationCode" />
+                <ScalarProperty Name="MeterPointStatus" ColumnName="MeterPointStatus" />
+                <ScalarProperty Name="PostalCodeID" ColumnName="PostalCodeID" />
+                <ScalarProperty Name="Live" ColumnName="Live" />
+                <ScalarProperty Name="Pending" ColumnName="Pending" />
+                <ScalarProperty Name="OutcomeId" ColumnName="OutcomeId" />
+                <ScalarProperty Name="ActionDateTime" ColumnName="ActionDateTime" />
+                <ScalarProperty Name="DoorKnocked" ColumnName="DoorKnocked" />
+                <ScalarProperty Name="DoorKnockedCancelReason" ColumnName="DoorKnockedCancelReason" />
+                <ScalarProperty Name="ContactMade" ColumnName="ContactMade" />
+                <ScalarProperty Name="ContactMadeCancelReason" ColumnName="ContactMadeCancelReason" />
+                <ScalarProperty Name="DecisionMakerMet" ColumnName="DecisionMakerMet" />
+                <ScalarProperty Name="DecisionMakerMetCancelReason" ColumnName="DecisionMakerMetCancelReason" />
+                <ScalarProperty Name="DecisionMakerPresentedTo" ColumnName="DecisionMakerPresentedTo" />
+                <ScalarProperty Name="DecisionMakerPresentedToCancelReason" ColumnName="DecisionMakerPresentedToCancelReason" />
+                <ScalarProperty Name="Sale" ColumnName="Sale" />
+                <ScalarProperty Name="SaleCancelReason" ColumnName="SaleCancelReason" />
+                <ScalarProperty Name="SalesRepId" ColumnName="SalesRepId" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Archived" ColumnName="Archived" />
+                <ScalarProperty Name="ArchivedDateTime" ColumnName="ArchivedDateTime" />
+                <ScalarProperty Name="Reschedule" ColumnName="Reschedule" />
+                <ScalarProperty Name="RescheduleDateTime" ColumnName="RescheduleDateTime" />
+                <ScalarProperty Name="ActionStageEnd" ColumnName="ActionStageEnd" />
+                <ScalarProperty Name="ActionStageCancelReason" ColumnName="ActionStageCancelReason" />
+                <ScalarProperty Name="SaleKeypad" ColumnName="SaleKeypad" />
+                <ScalarProperty Name="SaleBillPay" ColumnName="SaleBillPay" />
+                <ScalarProperty Name="DoNotContact" ColumnName="DoNotContact" />
+                <ScalarProperty Name="SaleOrigin" ColumnName="SaleOrigin" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PremisesBySalesRepIdMostRecentOutcomeCallBack" FunctionName="GISMultipleAllocationModel.Store.PremisesBySalesRepIdMostRecentOutcomeCallBack">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GISMultipleAllocationModel.PremisesBySalesRepIdMostRecentOutcomeCallBack_Result">
+                <ScalarProperty Name="PremiseID" ColumnName="PremiseID" />
+                <ScalarProperty Name="MPRN" ColumnName="MPRN" />
+                <ScalarProperty Name="MeterPointAddress" ColumnName="MeterPointAddress" />
+                <ScalarProperty Name="DUosGroup" ColumnName="DUosGroup" />
+                <ScalarProperty Name="MeterConfigurationCode" ColumnName="MeterConfigurationCode" />
+                <ScalarProperty Name="MeterPointStatus" ColumnName="MeterPointStatus" />
+                <ScalarProperty Name="PostalCodeID" ColumnName="PostalCodeID" />
+                <ScalarProperty Name="Live" ColumnName="Live" />
+                <ScalarProperty Name="Pending" ColumnName="Pending" />
+                <ScalarProperty Name="OutcomeId" ColumnName="OutcomeId" />
+                <ScalarProperty Name="ActionDateTime" ColumnName="ActionDateTime" />
+                <ScalarProperty Name="DoorKnocked" ColumnName="DoorKnocked" />
+                <ScalarProperty Name="DoorKnockedCancelReason" ColumnName="DoorKnockedCancelReason" />
+                <ScalarProperty Name="ContactMade" ColumnName="ContactMade" />
+                <ScalarProperty Name="ContactMadeCancelReason" ColumnName="ContactMadeCancelReason" />
+                <ScalarProperty Name="DecisionMakerMet" ColumnName="DecisionMakerMet" />
+                <ScalarProperty Name="DecisionMakerMetCancelReason" ColumnName="DecisionMakerMetCancelReason" />
+                <ScalarProperty Name="DecisionMakerPresentedTo" ColumnName="DecisionMakerPresentedTo" />
+                <ScalarProperty Name="DecisionMakerPresentedToCancelReason" ColumnName="DecisionMakerPresentedToCancelReason" />
+                <ScalarProperty Name="Sale" ColumnName="Sale" />
+                <ScalarProperty Name="SaleCancelReason" ColumnName="SaleCancelReason" />
+                <ScalarProperty Name="SalesRepId" ColumnName="SalesRepId" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Archived" ColumnName="Archived" />
+                <ScalarProperty Name="ArchivedDateTime" ColumnName="ArchivedDateTime" />
+                <ScalarProperty Name="Reschedule" ColumnName="Reschedule" />
+                <ScalarProperty Name="RescheduleDateTime" ColumnName="RescheduleDateTime" />
+                <ScalarProperty Name="ActionStageEnd" ColumnName="ActionStageEnd" />
+                <ScalarProperty Name="ActionStageCancelReason" ColumnName="ActionStageCancelReason" />
+                <ScalarProperty Name="SaleKeypad" ColumnName="SaleKeypad" />
+                <ScalarProperty Name="SaleBillPay" ColumnName="SaleBillPay" />
+                <ScalarProperty Name="DoNotContact" ColumnName="DoNotContact" />
+                <ScalarProperty Name="SaleOrigin" ColumnName="SaleOrigin" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PremisesBySalesRepIdMostRecentOutcomeCurrentArea" FunctionName="GISMultipleAllocationModel.Store.PremisesBySalesRepIdMostRecentOutcomeCurrentArea">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GISMultipleAllocationModel.PremisesBySalesRepIdMostRecentOutcomeCurrentArea_Result">
+                <ScalarProperty Name="PremiseID" ColumnName="PremiseID" />
+                <ScalarProperty Name="MPRN" ColumnName="MPRN" />
+                <ScalarProperty Name="MeterPointAddress" ColumnName="MeterPointAddress" />
+                <ScalarProperty Name="DUosGroup" ColumnName="DUosGroup" />
+                <ScalarProperty Name="MeterConfigurationCode" ColumnName="MeterConfigurationCode" />
+                <ScalarProperty Name="MeterPointStatus" ColumnName="MeterPointStatus" />
+                <ScalarProperty Name="PostalCodeID" ColumnName="PostalCodeID" />
+                <ScalarProperty Name="Live" ColumnName="Live" />
+                <ScalarProperty Name="Pending" ColumnName="Pending" />
+                <ScalarProperty Name="OutcomeId" ColumnName="OutcomeId" />
+                <ScalarProperty Name="ActionDateTime" ColumnName="ActionDateTime" />
+                <ScalarProperty Name="DoorKnocked" ColumnName="DoorKnocked" />
+                <ScalarProperty Name="DoorKnockedCancelReason" ColumnName="DoorKnockedCancelReason" />
+                <ScalarProperty Name="ContactMade" ColumnName="ContactMade" />
+                <ScalarProperty Name="ContactMadeCancelReason" ColumnName="ContactMadeCancelReason" />
+                <ScalarProperty Name="DecisionMakerMet" ColumnName="DecisionMakerMet" />
+                <ScalarProperty Name="DecisionMakerMetCancelReason" ColumnName="DecisionMakerMetCancelReason" />
+                <ScalarProperty Name="DecisionMakerPresentedTo" ColumnName="DecisionMakerPresentedTo" />
+                <ScalarProperty Name="DecisionMakerPresentedToCancelReason" ColumnName="DecisionMakerPresentedToCancelReason" />
+                <ScalarProperty Name="Sale" ColumnName="Sale" />
+                <ScalarProperty Name="SaleCancelReason" ColumnName="SaleCancelReason" />
+                <ScalarProperty Name="SalesRepId" ColumnName="SalesRepId" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Archived" ColumnName="Archived" />
+                <ScalarProperty Name="ArchivedDateTime" ColumnName="ArchivedDateTime" />
+                <ScalarProperty Name="Reschedule" ColumnName="Reschedule" />
+                <ScalarProperty Name="RescheduleDateTime" ColumnName="RescheduleDateTime" />
+                <ScalarProperty Name="ActionStageEnd" ColumnName="ActionStageEnd" />
+                <ScalarProperty Name="ActionStageCancelReason" ColumnName="ActionStageCancelReason" />
+                <ScalarProperty Name="SaleKeypad" ColumnName="SaleKeypad" />
+                <ScalarProperty Name="SaleBillPay" ColumnName="SaleBillPay" />
+                <ScalarProperty Name="DoNotContact" ColumnName="DoNotContact" />
+                <ScalarProperty Name="SaleOrigin" ColumnName="SaleOrigin" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PremisesBySalesRepIdMostRecentOutcomeRemoveKnocked" FunctionName="GISMultipleAllocationModel.Store.PremisesBySalesRepIdMostRecentOutcomeRemoveKnocked">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GISMultipleAllocationModel.PremisesBySalesRepIdMostRecentOutcomeRemoveKnocked_Result">
+                <ScalarProperty Name="PremiseID" ColumnName="PremiseID" />
+                <ScalarProperty Name="MPRN" ColumnName="MPRN" />
+                <ScalarProperty Name="MeterPointAddress" ColumnName="MeterPointAddress" />
+                <ScalarProperty Name="DUosGroup" ColumnName="DUosGroup" />
+                <ScalarProperty Name="MeterConfigurationCode" ColumnName="MeterConfigurationCode" />
+                <ScalarProperty Name="MeterPointStatus" ColumnName="MeterPointStatus" />
+                <ScalarProperty Name="PostalCodeID" ColumnName="PostalCodeID" />
+                <ScalarProperty Name="Live" ColumnName="Live" />
+                <ScalarProperty Name="Pending" ColumnName="Pending" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="RepAreaPremisesAllocatedToSalesRepIdByDate" FunctionName="GISMultipleAllocationModel.Store.RepAreaPremisesAllocatedToSalesRepIdByDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GISMultipleAllocationModel.RepAreaPremisesAllocatedToSalesRepIdByDate_Result">
+                <ScalarProperty Name="PremiseID" ColumnName="PremiseID" />
+                <ScalarProperty Name="MPRN" ColumnName="MPRN" />
+                <ScalarProperty Name="MeterPointAddress" ColumnName="MeterPointAddress" />
+                <ScalarProperty Name="DUoSGroup" ColumnName="DUoSGroup" />
+                <ScalarProperty Name="MeterConfigurationCode" ColumnName="MeterConfigurationCode" />
+                <ScalarProperty Name="MeterPointStatus" ColumnName="MeterPointStatus" />
+                <ScalarProperty Name="PostalCodeID" ColumnName="PostalCodeID" />
+                <ScalarProperty Name="Live" ColumnName="Live" />
+                <ScalarProperty Name="Pending" ColumnName="Pending" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

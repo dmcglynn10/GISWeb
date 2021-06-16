@@ -1,0 +1,142 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="GISWeb.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - Click Energy GIS</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>        
+    </asp:PlaceHolder>
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/Content/Site/Site.css" rel="stylesheet" />
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="bootstrap" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" runat="server" href="~/"><img src="logo_click.png" style="max-width:120px; margin-top:-10px; margin-bottom:20px;" /></a>                    
+                </div>
+                <div class="navbar-collapse collapse" id="navbarNavDropdown">
+                    <ul class="nav navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" runat="server" href="~/">
+                               Home
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" runat="server" href="~/SalesRep" id="navbarDropdownMenuSalesRepLink" 
+                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Reps
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuSalesRepLink">
+                               <li class="dropdown-item"><a runat="server" href="~/SalesRep">Add/Edit Reps</a></li>
+                                <li class="dropdown-item"><a runat="server" href="~/KPI">KPI</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" runat="server" href="~/Premises" id="navbarDropdownMenuPremisesLink" 
+                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Premises
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuPremisesLink">
+                                
+                                <li class="dropdown-item"><a runat="server" href="~/premiseHistory">Premise History</a></li>  
+                                <li class="dropdown-item"><a runat="server" href="~/DNC">Do not Contact</a></li> 
+                                <li class="dropdown-item"><a runat="server" href="~/PremisesKPBP">Keypad / Billpay</a></li>
+                                <li class="dropdown-item"><a runat="server" href="~/ClaimedPremises">Claimed Premises</a></li>
+                            </ul>
+                        </li>     
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" runat="server" href="~/SalesRep" id="A1" 
+                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Allocate Reps
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuSalesRepLink">
+                                <li class="dropdown-item"><a runat="server" href="~/Premises">Allocate Rep to Area</a></li>
+<%--                               <li class="dropdown-item"><a runat="server" href="~/SalesRep">List Sales Reps</a></li>
+                                <li class="dropdown-item"><a runat="server" href="~/SalesRepActions">Sales Rep Actions</a></li>
+                                <li class="dropdown-item"><a runat="server" href="~/CurrentArea">List Allocated Areas</a></li>
+                                <li class="dropdown-item"><a runat="server" href="~/CurrentAreaByRep">Current Area By SalesRep</a></li>
+                                <li class="dropdown-item"><a runat="server" href="~/Outcomes">Outcomes</a></li>--%>
+<%--                                <li class="dropdown-item"><a runat="server" href="~/KPI">KPI</a></li>
+                                <li class="dropdown-item"><a runat="server" href="~/Sales">Sales</a></li>--%>
+                            </ul>
+                        </li>
+
+                         <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" runat="server" href="~/SalesRep" id="A2" 
+                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Reports
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuSalesRepLink">
+  <%--                              <li class="dropdown-item"><a runat="server" href="~/Premises">Allocate Rep to Area</a></li>
+                               <li class="dropdown-item"><a runat="server" href="~/SalesRep">List Sales Reps</a></li>--%>
+                                <li class="dropdown-item"><a runat="server" href="~/SalesRepActions">Sales Rep Actions</a></li>
+                                <li class="dropdown-item"><a runat="server" href="~/CurrentArea">Show areas assigned to reps</a></li>
+                                <li class="dropdown-item"><a runat="server" href="~/CurrentAreaByRep">Current Area By SalesRep</a></li>
+                                <li class="dropdown-item"><a runat="server" href="~/Outcomes">Outcomes</a></li>
+<%--                                <li class="dropdown-item"><a runat="server" href="~/KPI">KPI</a></li>--%>
+                                <li class="dropdown-item"><a runat="server" href="~/Sales">Sales</a></li>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+                    <p class="nav navbar-text navbar-right">
+                        <asp:LoginName runat="server" /></p>
+                </div>
+            </div>
+        </div>
+        <div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+               
+            </asp:ContentPlaceHolder>
+            <hr />
+            <footer>
+                <p>&copy; <%: DateTime.Now.Year %> - Click Energy Systems</p>
+            </footer>
+        </div>
+
+        <script>
+            $('body').css('padding-top', $('.navbar').outerHeight() + 'px');
+        </script>
+        
+        
+
+    </form>
+</body>
+</html>
